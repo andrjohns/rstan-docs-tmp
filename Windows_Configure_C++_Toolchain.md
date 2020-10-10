@@ -1,6 +1,4 @@
-# Install RStan on Windows
-
-## Configuring C++ Toolchain
+## Windows - Configuring C++ Toolchain
 
 ### R 3.6
 
@@ -10,6 +8,8 @@ The first step is to RTools3.5 from CRAN, also linked here: https://cran.r-proje
 
 Next, we need to configure R to be able to find the installed toolchain. To do this, we need to add the RTools directory to the system PATH variable and set the BINPREF variable to point to the right compilers. We'll use the ```pkgbuild``` package to find the RTools installation directory (this is an RStan dependency, and so would have been installed regardless):
 ```
+install.packages("pkgbuild")
+
 rt_path = pkgbuild::rtools_path()
 rt_bin = paste0(substr(rt_path,1,nchar(rt_path)-4),"/mingw_$(WIN)/bin/")
 writeLines(paste0('PATH="',rt_path,';${PATH}"'), con = "~/.Renviron")
@@ -75,40 +75,3 @@ And that you can install packages from source:
 ```
 install.packages("jsonlite", type = "source")
 ```
-
-## Installing RStan
-
-### Install Packages
-You can now install RStan via:
-```
-install.packages("rstan", repos = "https://cloud.r-project.org/",
-                 dependencies = TRUE)
-```
-
-Before moving to the next section verify that the following packages are at or above the indicated version:
-
- - ```rstan```: 2.21.2
- - ```StanHeaders```: 2.21.0-6
- - ```inline```: 0.3.16
-
-
-### Verify Installation
-
-To verify your installation, you can run the RStan example/test model:
-```
-library(rstan)
-example(stan_model,run.dontrun = TRUE)
-```
-
-The model should then compile and sample. You may also see the warning:
-```
-Warning message:
-In system(paste(CXX, ARGS), ignore.stdout = TRUE, ignore.stderr = TRUE) :
-  'C:/rtools40/usr/mingw_/bin/g++' not found
-```
-
-This is safe to ignore and will be removed in the next RStan release.
-
-# Encountering Errors
-
-If you are unable to install RStan or successfully run the example/test model, then please open a new thread on the Stan forums (https://discourse.mc-stan.org) with a description of your problem and any error message, and we will help troubleshoot your installation.
